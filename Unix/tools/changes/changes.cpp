@@ -17,13 +17,13 @@
 #include <dirent.h>
 #include <algorithm>
 #include <sys/stat.h>
-#include <openssl/md5.h>
+#include <openssl/sha.h>
 
 using namespace std;
 
 const char* arg0;
 
-// Key=path, Value=MD5:
+// Key=path, Value=SHA256:
 typedef pair<string, string> Pair;
 typedef map<string, string> Map;
 
@@ -64,9 +64,9 @@ static bool LoadFile(
     return true;
 }
 
-static bool FindMD5(
+static bool FindSHA(
     const char* path,
-    string& md5)
+    string& sha256)
 {
     vector<char> data;
 
@@ -74,17 +74,16 @@ static bool FindMD5(
         return false;
 
     {
-        MD5_CTX ctx;
-        MD5_Init(&ctx);
-        MD5_Update(&ctx, &data[0], data.size());
-        unsigned char digest[MD5_DIGEST_LENGTH];
-        MD5_Final(digest, &ctx);
-
-        for (size_t i = 0; i < MD5_DIGEST_LENGTH; i++)
+        SHA256_CTX ctx;
+        SHA256_Init(&ctx);
+        SHA256_Update(&ctx, &data[0], data.size());
+        unsigned char digest[SHA256_DIGEST_LENGTH];
+        SHA256_Final(digest, &ctx);
+        for (size_t i = 0; i < SHA256_DIGEST_LENGTH; i++)
         {
             char buf[3];
             sprintf(buf, "%02X", digest[i]);
-            md5 += buf;
+            sha256 += buf;
         }
     }
 
@@ -142,20 +141,20 @@ static void Scan(
         {
             dirs.push_back(path);
 
-            string md5 = "00000000000000000000000000000000";
-            files.insert(Pair(path, md5));
+            string sha256 = "0000000000000000000000000000000000000000000000000000000000000000";
+            files.insert(Pair(path, sha256));
         }
         else
         {
-            string md5;
+            string sha256;
 
-            if (!FindMD5(path.c_str(), md5))
+            if (!FindSHA(path.c_str(), sha256))
             {
-                fprintf(stderr, "%s: failed to find MD5: %s\n",
+                fprintf(stderr, "%s: failed to find SHA256: %s\n",
                     arg0, path.c_str());
             }
 
-            files.insert(Pair(path, md5));
+            files.insert(Pair(path, sha256));
         }
     }
 
@@ -198,9 +197,9 @@ static bool WriteChangesFile(
     while (p != end)
     {
         string path = (*p).first;
-        string md5 = (*p).second;
+        string sha256 = (*p).second;
 
-        fprintf(os, "%s:%s\n", md5.c_str(), path.c_str());
+        fprintf(os, "%s:%s\n", sha256.c_str(), path.c_str());
         p++;
     }
 
@@ -234,15 +233,15 @@ static bool LoadChangesFile(
             return false;
         }
 
-        string md5 = string(buf, colon - buf);
+        string sha256 = string(buf, colon - buf);
         string path = string(colon + 1);
 
 #if 0
-        printf("md5{%s}\n", md5.c_str());
+        printf("sha256{%s}\n", sha256.c_str());
         printf("path{%s}\n", path.c_str());
 #endif
 
-        files.insert(Pair(path, md5));
+        files.insert(Pair(path, sha256));
     }
 
     fclose(is);
@@ -288,10 +287,10 @@ void DiffChanges(
             }
             else
             {
-                string md5a = (*p).second;
-                string md5b = (*pos).second;
+                string sha256a = (*p).second;
+                string sha256b = (*pos).second;
 
-                if (md5a != md5b)
+                if (sha256a != sha256b)
                 {
                     Change tmp;
                     tmp.type = 'M';
