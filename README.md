@@ -1,3 +1,17 @@
+## ⚠️ Deprecation & Archiving Notice ⚠️  
+
+Thank you for your support and contributions to **OMI**.  
+
+This repository is now **deprecated** and will be **archived soon**.  
+
+- **No further development, maintenance, or updates** will be provided.  
+- **Bug fixes, security patches, and feature enhancements** are no longer planned.  
+- After archiving, this repository will remain **available in read-only mode** for reference.  
+
+For any questions, please refer to the existing documentation or community discussions.  
+
+---
+
 # Open Management Infrastructure [![Build Status](https://travis-ci.org/Microsoft/omi.svg?branch=master)](https://travis-ci.org/Microsoft/omi)
 
 Open Management Infrastructure (OMI) is an open source project to
@@ -62,8 +76,10 @@ said, our formal tested matrix of Linux platforms includes the following:
 - CentOS 8 x64 (omi>=1.6.5-0)
 - Debian 8 (x86 and x64) and Debian 9 x64
 - Debian 10 x64 and 11 x64 (omi>=1.6.8-0)
+- Debian 12 x64 (omi>=1.7.3-0)
 - Oracle Linux 6, and 7 (x86 and x64)
 - Oracle Linux 8 x64 (omi>=1.6.8-0)
+- Oracle Linux 9 x64(omi>=1.7.0-0)
 - Red Hat Enterprise Linux Server 6 and 7 (x86 and x64)
   - Note: Red Hat 7.1 or later also runs on the PPC platform
 - Red Hat Enterprise Linux Server 8 x64 (omi>=1.6.4-0)
@@ -72,6 +88,11 @@ said, our formal tested matrix of Linux platforms includes the following:
 - Ubuntu 14.04 LTS, 16.04 LTS and 18.04 LTS (x86 and x64)
 - Ubuntu 20.04 LTS x64 (omi>=1.6.8-0)
 - Ubuntu 22.04 LTS x64 (omi>=1.7.0-0)
+- Ubuntu 24.04 LTS x64 (omi>=1.9.0-0)
+- Rocky Linux 8 x64(omi>=1.6.10-0)
+- Rocky Linux 9 x64(omi>=1.7.0-0)
+- Alma Linux 8 x64(omi>=1.6.10-0) 
+- Alma Linux 9 x64(omi>=1.7.0-0)
 
 ### Supported Unix Operating Systems
 
